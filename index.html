@@ -1,0 +1,138 @@
+<html>
+<head>
+	<title>Pacman</title>
+
+	<style>
+		*{
+			padding:0px;
+			margin:0px;
+		}
+		body{
+			background-color:black;
+		}
+		div.row div {
+			width:20px;
+			height:20px;
+			display:inline-block;
+		}
+		.brick{
+			background-color: blue;
+		}
+		.empty{
+			background-color: black;
+		}
+		.coin{
+			background-color: yellow;
+			border-radius:20px;
+		}
+		#pacman{
+			width:20px;
+			height:20px;
+			display:inline-block;
+			background: url('pacman.gif');
+			background-size:cover;
+			position:absolute;
+			top:40px;
+			left:100px;
+		}
+
+	</style>
+
+</head>
+<body>
+
+	<div id='container'>
+		<div id='pacman'></div>
+		<div id='maze'></div>
+	</div>
+
+	<script>
+		var maze = [
+			[2,2,2,2,2,2,2,2,2,2,2,2],
+			[2,1,2,1,1,2,1,1,2,1,1,2],
+			[2,1,2,1,1,2,1,2,2,2,1,2],
+			[2,1,1,1,1,2,1,1,1,1,1,2],
+			[2,2,2,1,1,1,1,1,1,1,1,2],
+			[2,1,2,1,1,2,1,1,1,1,1,2],
+			[2,1,2,1,1,2,1,1,1,1,1,2],
+			[2,1,1,1,1,2,1,1,1,1,1,2],
+			[2,2,2,2,2,2,2,2,2,2,2,2]
+		];
+
+		var pacman = {
+			x: 5,
+			y: 1
+		}
+
+		var gameInfo = {
+			score: 0,
+			lives: 3
+		}
+
+		function drawWorld(){
+			var output = '';
+
+			for(var i=0; i<maze.length; i++)
+			{
+				output += "\n<div class='row'>";
+
+				for(var j=0; j<maze[i].length; j++)
+				{
+					if(maze[i][j] == 0)
+						output += "\n\t<div class='empty'></div>";
+					else if(maze[i][j] == 1)
+						output += "\n\t<div class='coin'></div>";
+					else if(maze[i][j] == 2)
+						output += "\n\t<div class='brick'></div>";
+				}
+				output += "\n</div>";
+			}
+			document.getElementById('maze').innerHTML = output;
+		}
+
+		function drawPacman(){
+			document.getElementById('pacman').style.top = pacman.y*24;
+			document.getElementById('pacman').style.left = pacman.x*24;
+		}
+
+		function detectCoin(){
+			if(maze[pacman.y][pacman.x] == 1)
+			{
+				gameInfo.score += 10;
+				maze[pacman.y][pacman.x] = 0;
+			}
+		}
+
+		document.onkeydown = function(e){
+			if(e.keyCode == 37)
+			{
+				pacman.x--;
+			}
+			else if(e.keyCode == 39)
+			{
+				pacman.x++;
+			}
+			else if(e.keyCode == 38)
+			{
+				pacman.y--;
+			}
+			else if(e.keyCode == 40)
+			{
+				pacman.y++;
+			}
+			console.log('keycode', e.keyCode, 'pacman', pacman);
+			detectCoin();
+			drawPacman();
+			drawWorld();
+		}
+
+		drawWorld();
+		drawPacman()
+
+
+
+	</script>
+
+
+</body>
+</html>
